@@ -1,0 +1,2 @@
+# Hematovision-advanced-blood-cell-classification-using-transfer-learning
+HematoVision develops an efficient blood cell classification system using transfer learning. Trained on 12,000 annotated images of eosinophils, lymphocytes, monocytes, and neutrophils, it leverages pre-trained CNNs to improve accuracy, reduce training time, and support reliable, scalable diagnosis for healthcare professionals.
