@@ -1,39 +1,41 @@
 # Hematovision-advanced-blood-cell-classification-using-transfer-learning
-HematoVision develops an efficient blood cell classification system using transfer learning. Trained on 12,000 annotated images of eosinophils, lymphocytes, monocytes, and neutrophils, it leverages pre-trained CNNs to improve accuracy, reduce training time, and support reliable, scalable diagnosis for healthcare professionals.
 
-** Project Description**
- 
-This project aims to automate the classification of blood cells using deep learning. Transfer learning is applied to reduce training time and improve performance.
+HematoVision now includes a Java/Spring Boot implementation for blood cell classification using the existing `Blood Cell.h5` model.
 
-📁 Dataset
-Contains labeled images of:
-Neutrophil
-Eosinophil
-Monocyte
-Lymphocyte
+## Java Stack
+- Spring Boot (REST API + static web UI)
+- DL4J model import for Keras `.h5` model inference
+- OpenCV Java bindings for image decoding, resizing, and RGB preprocessing
+- ND4J for tensor handling
 
-⚙️ Technologies Used
-Python
-TensorFlow / Keras
-NumPy, Matplotlib
-Transfer Learning (MobileNetV2)
+## Classes Predicted
+- eosinophil
+- lymphocyte
+- monocyte
+- neutrophil
 
-🚀 How to Run
-Clone this repo
-Install requirements: pip install -r requirements.txt
-Run: python main.py
+## Run the Java Application
+From repository root:
 
-📈 Results
-Accuracy: ~96%
-High precision & recall
-Confusion matrix indicates strong classification ability
+```bash
+mvn spring-boot:run
+```
 
-submitted by:
-Team ID : LTVIP2026TMIDS87105
+Application URLs:
+- UI: `http://localhost:8080/`
+- Health: `GET /api/health`
+- Classification: `POST /api/classify` (`multipart/form-data`, field: `file`)
 
-Team Size : 4
-
-Team Leader : Kagitala Saikumar
-Team member : Doddaka Venkata Chandu
-Team member : Ravi Lakshmi Sai Varun
-Team member : Kambala Venkata Sai Prem Chand
+## API Response Example
+```json
+{
+  "predictedClass": "neutrophil",
+  "probabilities": {
+    "eosinophil": 0.02,
+    "lymphocyte": 0.11,
+    "monocyte": 0.15,
+    "neutrophil": 0.72
+  },
+  "imageBase64": "..."
+}
+```

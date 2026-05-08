@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HematoVision Java API</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.1/milligram.css">
+    <style>
+        body { background: #f9f9f9; margin-top: 40px; }
+        .container { max-width: 800px; background: #fff; padding: 32px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        .header { background: #e74c3c; color: white; padding: 12px; border-radius: 8px; text-align: center; }
+        .result { margin-top: 20px; }
+        img { max-width: 320px; margin-top: 10px; border-radius: 8px; }
+        pre { white-space: pre-wrap; word-break: break-all; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header"><h3>HematoVision Blood Cell Classification (Java)</h3></div>
+    <p>Upload a blood cell image to classify one of: eosinophil, lymphocyte, monocyte, neutrophil.</p>
+
+    <form id="uploadForm">
+        <input type="file" id="file" name="file" accept="image/*" required>
+        <button type="submit">Classify</button>
+    </form>
+
+    <div class="result" id="result"></div>
+</div>
+
+<script>
+    document.getElementById('uploadForm').addEventListener('submit', async function (event) {
+        event.preventDefault();
+        const fileInput = document.getElementById('file');
+        const result = document.getElementById('result');
+
+        if (!fileInput.files.length) {
+            result.innerHTML = '<p>Please choose an image first.</p>';
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('file', fileInput.files[0]);
+
+        const response = await fetch('/api/classify', { method: 'POST', body: formData });
+        const data = await response.json();
+
+        if (!response.ok) {
+            result.innerHTML = `<p><strong>Error:</strong> ${data.error}</p>`;
+            return;
+        }
+
+        result.innerHTML = `
+            <h4>Predicted Class: ${data.predictedClass}</h4>
+            <img src="data:image/png;base64,${data.imageBase64}" alt="Uploaded image"/>
+            <h5>Probabilities (JSON)</h5>
+            <pre>${JSON.stringify(data.probabilities, null, 2)}</pre>
+        `;
+    });
+</script>
+</body>
+</html>
