@@ -38,6 +38,7 @@ public class ImageProcessor {
             }
         }
 
+        // Keep NHWC to match the original TensorFlow/Keras model input contract.
         return Nd4j.create(data, new long[]{1, IMAGE_HEIGHT, IMAGE_WIDTH, CHANNELS}, 'c');
     }
 }

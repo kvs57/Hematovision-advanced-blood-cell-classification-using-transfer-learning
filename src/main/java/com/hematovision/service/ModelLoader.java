@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Component
 public class ModelLoader {
@@ -15,17 +16,21 @@ public class ModelLoader {
             Path.of("Project Files", "Blood Cell.h5")
     );
 
-    private volatile ComputationGraph model;
+    private final AtomicReference<ComputationGraph> model = new AtomicReference<>();
 
     public ComputationGraph getModel() {
-        if (model == null) {
-            synchronized (this) {
-                if (model == null) {
-                    model = loadModel();
-                }
-            }
+        ComputationGraph current = model.get();
+        if (current != null) {
+            return current;
         }
-        return model;
+        synchronized (this) {
+            current = model.get();
+            if (current == null) {
+                current = loadModel();
+                model.set(current);
+            }
+            return current;
+        }
     }
 
     private ComputationGraph loadModel() {

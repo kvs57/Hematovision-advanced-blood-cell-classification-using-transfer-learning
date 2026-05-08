@@ -54,7 +54,7 @@ class BloodCellControllerTest {
 
     @Test
     void classifyShouldFailForMissingFile() throws Exception {
-        MockMultipartFile file = new MockMultipartFile("file", "", MediaType.APPLICATION_OCTET_STREAM_VALUE, new byte[0]);
+        MockMultipartFile file = new MockMultipartFile("file", "empty.png", MediaType.IMAGE_PNG_VALUE, new byte[0]);
 
         mockMvc.perform(multipart("/api/classify").file(file))
                 .andExpect(status().isBadRequest())
